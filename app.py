@@ -5,11 +5,11 @@ import mysql.connector
 DB_CONFIG = {
     "host": "127.0.0.1",
     "user": "root",
-    "password": "",  # Change this
-    "database": "sem"      # Change to your database name
+    "password": "",  
+    "database": "sem"      
 }
 
-JSON_FILE = "app.json"  # Ensure this is in the same folder as the script
+JSON_FILE = "app.json"  
 
 # === DATABASE CONNECTION ===
 conn = mysql.connector.connect(**DB_CONFIG)

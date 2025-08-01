@@ -10,12 +10,10 @@ const targetID = "8912";
 // Search in 'takes' array
 const results = data.takes.filter(entry => entry.ID === targetID ); // check both ID and s_ID just in case
 
-// Output the result
 if (results.length > 0) {
   console.log(`Found ${results.length} records for ID ${targetID}:`);
   console.log(results);
 
-  // Check for duplicate course_ids
   const courseCount = {};
   results.forEach(entry => {
     const course = entry.course_id;
@@ -30,7 +28,7 @@ if (results.length > 0) {
       console.log(`- ${courseId}: ${count} times`);
     });
   } else {
-    console.log("\n✅ No duplicate course_id found for this ID.");
+    console.log("\nNo duplicate course_id found for this ID.");
   }
 
 } else {
