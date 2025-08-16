@@ -66,16 +66,16 @@ CREATE TABLE prereq (
     course_id VARCHAR(10),
     prereq_id VARCHAR(10),
     PRIMARY KEY (course_id, prereq_id),
-    FOREIGN KEY (course_id) REFERENCES course(course_id)
+    FOREIGN KEY (course_id) REFERENCES course(course_id),
     FOREIGN KEY (prereq_id) REFERENCES course(course_id)
 );
 
 CREATE TABLE advisor (
-    i_id VARCHAR(10),
-    s_id VARCHAR(10),
-    PRIMARY KEY (i_id, s_id),
-    FOREIGN KEY (i_id) REFERENCES instructor(ID)
-    FOREIGN KEY (s_id) REFERENCES student(ID)
+    i_ID VARCHAR(10),
+    s_ID VARCHAR(10),
+    PRIMARY KEY (i_ID, s_ID),
+    FOREIGN KEY (i_ID) REFERENCES instructor(ID),
+    FOREIGN KEY (s_ID) REFERENCES student(ID)
 );
 
 CREATE TABLE takes (
@@ -89,4 +89,28 @@ CREATE TABLE takes (
     FOREIGN KEY (ID) REFERENCES student(ID),
     FOREIGN KEY (course_id, sec_id) REFERENCES section(course_id, sec_id)
 );
+
+-- takes: add encrypted grade columns; keep composite PK as-is
+ALTER TABLE `takes`
+  DROP COLUMN `grade`,
+  ADD COLUMN `grade_ct` VARBINARY(255) NOT NULL,
+  ADD COLUMN `grade_iv` BINARY(12) NOT NULL;
+
+-- student: keep ID, dept_name plaintext; encrypt others (e.g., name, tot_cred)
+ALTER TABLE `student`
+  DROP COLUMN `name`,
+  DROP COLUMN `tot_cred`,
+  ADD COLUMN `name_ct` VARBINARY(1024),
+  ADD COLUMN `name_iv` BINARY(12),
+  ADD COLUMN `tot_cred_ct` VARBINARY(255),
+  ADD COLUMN `tot_cred_iv` BINARY(12);
+
+-- instructor: keep ID, dept_name plaintext; encrypt others (e.g., name, salary)
+ALTER TABLE `instructor`
+  DROP COLUMN `name`,
+  DROP COLUMN `salary`,
+  ADD COLUMN `name_ct` VARBINARY(1024),
+  ADD COLUMN `name_iv` BINARY(12),
+  ADD COLUMN `salary_ct` VARBINARY(255),
+  ADD COLUMN `salary_iv` BINARY(12);
 
